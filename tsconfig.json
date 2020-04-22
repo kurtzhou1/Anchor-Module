@@ -20,13 +20,11 @@
     "jsx": "react"
   },
   "include": [
-    "src/**/*",
-    "entry/**/*",
-    "src/source/templates/sidebar_nion/jquery-3.4.1.min.js",
-    "*.d.ts"
+    "src",
+    "public",
   ],
   "exclude": [
-    "node_modules/**/*",
-    "dist/**/*"
+    "node_modules/*",
+    "dist/*"
   ]
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import classNames from 'classnames'
-import styles from '../css.scss'
-import { Sticky } from 'react-sticky'
-import { schemaPositionId } from '@library/SchemaPositionID'
+// import classNames from 'classnames'
+// import styles from '../css.scss'
+// import { Sticky } from 'react-sticky'
+// import { schemaPositionId } from '@library/SchemaPositionID'
 
 export interface fixed {
     startFixedY: number
@@ -193,11 +193,11 @@ const NvCogl: React.FC<IProps> = (props) => {
         )
     })
     const classname = 'nv_cogl'
-    const cx = classNames.bind(styles)
+    // const cx = classNames.bind(styles)
     const top = topDistance !== 0 ? topDistance : defaultTopDistance
     return (
         <div ref={defaultDistance}>
-            <div
+            {/* <div
                 className={cx([
                     openMenu
                         ? [`${classname}_mobileMenuOpen`]
@@ -245,7 +245,7 @@ const NvCogl: React.FC<IProps> = (props) => {
                         </div>
                     )
                 }}
-            </Sticky>
+            </Sticky> */}
         </div>
     )
 }
