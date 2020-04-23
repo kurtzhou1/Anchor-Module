@@ -4,13 +4,16 @@ import Anchor from './components/Module'
 
 const App  = ()=> {
     
-    let divStyle = {
+    const divStyle = {
         padding: '5px',
         height: '500px',
         width: '100%',
         outline: '1px solid black',
     }
 
+    const props ={
+        
+    }
     return(
         <div>
             <div className='bn_cogl'>
@@ -36,6 +39,7 @@ const App  = ()=> {
                 anchors:specialoffer
                 </div>
             </div>
+            <Anchor {...props} />
         </div>
     )
 };
