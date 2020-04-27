@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 // import classNames from 'classnames'
-// import styles from '../css.scss'
-// import { Sticky } from 'react-sticky'
+import  '../scss/css.scss'
+import { Sticky } from 'react-sticky'
 // import { schemaPositionId } from '@library/SchemaPositionID'
 
 export interface fixed {
@@ -24,91 +24,87 @@ export interface data {
 }
 
 export interface dataAll {
-    positionID: string
-    positionName: string
     data: data[]
 }
 
 export interface IProps {
-    id: string
-    mode: string
     options: options
     data: dataAll
 }
 
-const NvCogl: React.FC<IProps> = (props) => {
-    console.log('props=>>', props)
+const Anchor: React.FC<IProps> = (props) => {
+    const data = props.data.data
+    const [activeID, setActiveID] = useState<string>('')
+    const [activeIDForM, setActiveIDForM] = useState<string>(data[0].title)
     const pcFixStartingPoint = props.options.fixed.desktop.startFixedY
     const mFixStartingPoint = props.options.fixed.mobile.startFixedY
     const [mode, setMode] = useState(window.innerWidth >= 980 ? 'pc' : 'm')
     const topDistance = mode === 'pc' ? pcFixStartingPoint : mFixStartingPoint
-    const getElementTop = (element) => {
-        let actualTop = element.offsetTop
-        let current = element.offsetParent
-        while (current !== null) {
-            actualTop += current.offsetTop
-            current = current.offsetParent
-        }
-        return actualTop
-    }
 
-    ///點擊滑動
-
-    const scrollToAnchor = (anchorName) => {
-        // setClickState(anchorName)
-        if (anchorName) {
-            let anchorElement = document.getElementById(anchorName)
-            let currentY: number = window.pageYOffset //當前視窗高度
+    //點擊滑動
+    const scrollToAnchor = (anchorName:string) => {
+        let anchorElement:HTMLElement | null = document.getElementById(anchorName)
+        if (anchorElement) {
+            let currentY: number = window.pageYOffset //當前視窗距離天花板的高度
             let targetBlockY: number = anchorElement.getBoundingClientRect().y //目標點距離當前視窗高度
-            let headerOffset: number = mode === 'pc' ? 79 : 0
-            let offsetPosition: number = currentY + targetBlockY - headerOffset
+            // let headerOffset: number = mode === 'pc' ? 79 : 0
+            // let offsetPosition: number = currentY + targetBlockY - headerOffset
+            let offsetPosition: number = currentY + targetBlockY
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth',
             })
-            setMobileMenu(false)
+            setOpenMenu(false)
         }
     }
 
     //滑動輪軸位置判斷
-    const data = props.data.data
-    const activeIDRef = useRef(null)
+    // const activeIDRef = useRef(null)
     const targetData = useRef(null)
-    const currentBlockIndex = useRef<number>(0)
-    const defaultDistance: any = useRef(null)
-    const [defaultTopDistance, setDefaultTopDistance] = useState(0)
-    const [activeID, setActiveID] = useState<string>('')
-    const [activeIDForM, setActiveIDForM] = useState<string>(data[0].title)
-    useEffect(() => {
-        document.addEventListener('scroll', onScroll)
-        setTimeout(onbeforeunload, 50)
-        const nv_cogl: HTMLElement = document.querySelector('.nv_cogl')
-        const menuDistance = nv_cogl.offsetHeight
-        setDefaultTopDistance(
-            Math.floor(defaultDistance.current.getBoundingClientRect().y)
-        )
-        let ary = []
-        for (let i = 0; i < data.length; i++) {
-            let ele: HTMLElement = document.getElementById(data[i].anchorTo)
-            ary[i] = {
-                startPoint: getElementTop(ele) - topDistance - menuDistance,
-                endPoint:
-                    getElementTop(ele) -
-                    topDistance +
-                    ele.offsetHeight -
-                    menuDistance,
-                id: data[i].anchorTo,
-            }
-        }
-        ary.sort((a, b) => (a.startPoint > b.startPoint ? 1 : -1))
-        targetData.current = ary
-        activeIDRef.current = { id: '', startPoint: 0, endPoint: 0 }
+    // const currentBlockIndex = useRef<number>(0)
+    // const defaultDistance: any = useRef(null)
+    // const [defaultTopDistance, setDefaultTopDistance] = useState(0)
+    // const getElementTop = (element) => {
+    //     let actualTop = element.offsetTop
+    //     let current = element.offsetParent
+    //     while (current !== null) {
+    //         actualTop += current.offsetTop
+    //         current = current.offsetParent
+    //     }
+    //     return actualTop
+    // }
+    // useEffect(() => {
+    //     document.addEventListener('scroll', onScroll)
+    //     // setTimeout(onbeforeunload, 50)
+    //     const sticky_bar: HTMLElement | null = document.querySelector('.sticky_bar')
+    //     const menuDistance = sticky_bar ? sticky_bar.offsetHeight : 0
+    //     setDefaultTopDistance(
+    //         Math.floor(defaultDistance.current.getBoundingClientRect().y)
+    //     )
+    //     let ary = []
+    //     for (let i = 0; i < data.length; i++) {
+    //         let ele: HTMLElement = document.getElementById(data[i].anchorTo)
+    //         ary[i] = {
+    //             startPoint: getElementTop(ele) - topDistance - menuDistance,
+    //             endPoint:
+    //                 getElementTop(ele) -
+    //                 topDistance +
+    //                 ele.offsetHeight -
+    //                 menuDistance,
+    //             id: data[i].anchorTo,
+    //         }
+    //     }
+    //     ary.sort((a, b) => (a.startPoint > b.startPoint ? 1 : -1))
+    //     targetData.current = ary
+    //     activeIDRef.current = { id: '', startPoint: 0, endPoint: 0 }
+    //     onScroll()
+    //     return () => {
+    //         document.removeEventListener('scroll', onScroll)
+    //     }
+    // }, [])
+    useEffect(()=>{
         onScroll()
-        return () => {
-            document.removeEventListener('scroll', onScroll)
-        }
-    }, [])
-    //滑動並檢查是否需要重新渲染
+    })
 
     const onScroll = () => {
         setMode(window.innerWidth >= 980 ? 'pc' : 'm')
@@ -167,7 +163,8 @@ const NvCogl: React.FC<IProps> = (props) => {
         }
     }
 
-    //資料渲染PC
+
+    //資料渲染-PC
     let dataIndexForPC = data.map((item: data) => (
         <li
             key={item.anchorTo}
@@ -178,76 +175,38 @@ const NvCogl: React.FC<IProps> = (props) => {
         </li>
     ))
 
-    //資料渲染Mobile
-    const [openMenu, setMobileMenu] = useState(false)
-
+    //資料渲染-Mobile
+    const [openMenu, setOpenMenu] = useState(false)
     let mobileMenu = data.map((item: data) => {
+        console.log('item.anchorTo=>>>',item.anchorTo)
         return (
-            <li
-                key={item.anchorTo}
+            <li key={item.anchorTo}
                 className={`${activeID === item.anchorTo ? 'click' : ''}`}
-                onClick={() => scrollToAnchor(item.anchorTo)}
-            >
+                onClick={() => scrollToAnchor(item.anchorTo)}>
                 {item.title}
             </li>
         )
     })
-    const classname = 'nv_cogl'
-    // const cx = classNames.bind(styles)
-    const top = topDistance !== 0 ? topDistance : defaultTopDistance
-    return (
-        <div ref={defaultDistance}>
-            {/* <div
-                className={cx([
-                    openMenu
-                        ? [`${classname}_mobileMenuOpen`]
-                        : [`${classname}_mobileMenuClose`],
-                ])}
-                onClick={() => {
-                    setMobileMenu(false)
-                }}
-            ></div>
-            <Sticky disableCompensation topOffset={top}>
-                {({ style }) => {
-                    return (
-                        <div
-                            className={cx(classname)}
-                            style={{
-                                ...style,
-                            }}
-                            {...schemaPositionId(props.id)}
-                        >
-                            <ul className="isPC">{dataIndexForPC}</ul>
-                            <ul
-                                className={`isM ${
-                                    openMenu ? 'mobileMenuShow' : ''
-                                }`}
-                                onClick={() => {
-                                    setMobileMenu(true)
-                                }}
-                            >
-                                {activeIDForM}
-                            </ul>
-                            <ul
-                                className={cx([
-                                    openMenu
-                                        ? 'mobileMenuOpen'
-                                        : 'mobileMenuClose',
-                                ])}
-                            >
-                                {mobileMenu}
-                                <li
-                                    onClick={() => {
-                                        setMobileMenu(false)
-                                    }}
-                                />
-                            </ul>
-                        </div>
-                    )
-                }}
-            </Sticky> */}
+
+    return(
+        <div>
+            <div className={openMenu ? 'anchor_mobileMenu_Open' : "anchor_mobileMenu_Close"} onClick={() => {setOpenMenu(false)}}></div>
+            <Sticky disableCompensation>{({style})=>{
+                return(
+                    <div className="sticky_bar" style={{...style}}>
+                        <ul className="isPC">{dataIndexForPC}</ul>
+                        <ul className={`isM ${openMenu ? 'mobileMenuShow' : ''}`}
+                            onClick={() => {setOpenMenu(true)}}>
+                            {activeIDForM}
+                        </ul>
+                        <ul className={openMenu ? 'mobileMenu_Open' : 'mobileMenu_Close'}>
+                            {mobileMenu}
+                            <li onClick={() => {setOpenMenu(false)}}/>
+                        </ul>
+                    </div>)}}
+            </Sticky>
         </div>
     )
 }
 
-export default NvCogl
+export default Anchor
