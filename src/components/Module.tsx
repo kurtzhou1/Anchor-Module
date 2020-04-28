@@ -78,9 +78,7 @@ const Anchor: React.FC<IProps> = (props) => {
         document.addEventListener('scroll', onScroll)
         // setTimeout(onbeforeunload, 50)
         const sticky_bar: HTMLElement | null = document.querySelector('.sticky_bar')
-        console.log('sticky_bar=>>>',sticky_bar)
         const menuDistance = sticky_bar ? sticky_bar.offsetHeight : 0
-        console.log('defaultDistance=>>',defaultDistance.current)
         // setDefaultTopDistance(
         //     Math.floor(defaultDistance.current.getBoundingClientRect().y)
         // )
@@ -118,7 +116,6 @@ const Anchor: React.FC<IProps> = (props) => {
                 
         let targetCurrentEnd =
             targetData.current[currentBlockIndex.current].endPoint
-        console.log('targetCurrentStart=>>>',targetData.current[currentBlockIndex.current].startPoint)
         if (
             //滾輪開始進入作用區域
             currentY >= targetCurrentStart &&
@@ -180,7 +177,6 @@ const Anchor: React.FC<IProps> = (props) => {
     //資料渲染-Mobile
     const [openMenu, setOpenMenu] = useState(false)
     let mobileMenu = data.map((item: data) => {
-        console.log('item.anchorTo=>>>',item.anchorTo)
         return (
             <li key={item.anchorTo}
                 className={`${activeID === item.anchorTo ? 'click' : ''}`}
